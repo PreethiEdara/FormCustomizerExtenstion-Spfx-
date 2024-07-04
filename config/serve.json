@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://arupdev.sharepoint.com/sites/preethi-test/_layouts/15/SPListForm.aspx",
+      "formCustomizer": {
+        "componentId": "51010ce2-4380-4ba8-8771-4bccaae42a8c",
+        "PageType": 8,
+        "RootFolder": "/sites/preethi-test/Lists/FormCustomizer",
+        "properties": {
+          "sampleText": "Value"
+        }
+      }
+    },
+    "formCustomizer_NewForm": {
+      "pageUrl": "https://arupdev.sharepoint.com/sites/preethi-test/_layouts/15/SPListForm.aspx",
+      "formCustomizer": {
+        "componentId": "51010ce2-4380-4ba8-8771-4bccaae42a8c",
+        "PageType": 8,
+        "RootFolder": "/sites/preethi-test/Lists/FormCustomizer",
+        "properties": {
+          "sampleText": "Value"
+        }
+      }
+    },
+    "formCustomizer_EditForm": {
+      "pageUrl": "https://arupdev.sharepoint.com/sites/preethi-test/_layouts/15/SPListForm.aspx",
+      "formCustomizer": {
+        "componentId": "51010ce2-4380-4ba8-8771-4bccaae42a8c",
+        "PageType": 6,
+        "RootFolder": "/sites/preethi-test/Lists/FormCustomizer",
+        "ID": 2,
+        "properties": {
+          "sampleText": "Value"
+        }
+      }
+    },
+    "formCustomizer_ViewForm": {
+      "pageUrl": "https://arupdev.sharepoint.com/sites/preethi-test/_layouts/15/SPListForm.aspx",
+      "formCustomizer": {
+        "componentId": "51010ce2-4380-4ba8-8771-4bccaae42a8c",
+        "PageType": 4,
+        "RootFolder": "/sites/preethi-test/Lists/FormCustomizer",
+        "ID": 1,
+        "properties": {
+          "sampleText": "Value"
+        }
+      }
+    }
+  }
+}
