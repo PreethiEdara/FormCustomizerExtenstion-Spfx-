@@ -8,10 +8,13 @@ import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import { Guid } from '@microsoft/sp-core-library';
 import { MessageBar, MessageBarType } from '@fluentui/react';
+import { WebPartContext } from '@microsoft/sp-webpart-base';
+
  
 export interface IEditFormProps {
     sp: SPFI;
     listGuid: Guid;
+    context: WebPartContext;
     itemId: number;
     onSave: () => void;
     onClose: () => void;

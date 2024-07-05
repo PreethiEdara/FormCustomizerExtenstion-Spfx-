@@ -6,10 +6,13 @@ import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import { Guid } from '@microsoft/sp-core-library';
 import { Label } from '@fluentui/react';
+import { WebPartContext } from '@microsoft/sp-webpart-base';
+
  
 export interface IDisplayFormProps {
     sp: SPFI;
     listGuid: Guid;
+    context: WebPartContext;
     itemId: number;
     onClose: () => void;
 }
