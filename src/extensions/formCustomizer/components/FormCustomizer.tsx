@@ -8,6 +8,7 @@ import "@pnp/sp/lists";
 import NewForm from '../Forms/NewForm';
 import EditForm from '../Forms/EditForm';
 import DisplayForm from '../Forms/DisplayForm';
+import FormProvider from '../Forms/FormContext';
 
 export interface IFormCustomizerProps {
   sp: SPFI;
@@ -22,8 +23,11 @@ export interface IFormCustomizerProps {
 const FormCustomizer: React.FC<IFormCustomizerProps> = (props) => {
   return (
     <div className={styles.formCustomizer}>
-      {props.displayMode === FormDisplayMode.New &&
+      {props.displayMode === FormDisplayMode.New &&   
+      <FormProvider>
         <NewForm sp={props.sp} context={props.context} listGuid={props.listGuid} onSave={props.onSave} onClose={props.onClose} />
+      </FormProvider>
+        
       }
       {props.displayMode === FormDisplayMode.Edit &&
         <EditForm sp={props.sp} context={props.context} listGuid={props.listGuid} itemId={props.itemID} onSave={props.onSave} onClose={props.onClose} />

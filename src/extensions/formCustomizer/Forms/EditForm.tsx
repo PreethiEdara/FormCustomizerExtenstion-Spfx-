@@ -53,7 +53,7 @@ const EditForm: FC<IEditFormProps> = (props) => {
             <div>Edit Form</div>
             <div style={{ margin: '10px' }}>
                 <TextField label="Enter Title:" value={title} onChange={(e, v) => setTitle(v !== undefined ? v : '')} />
-                <PrimaryButton text="Save" onClick={saveListItem} />
+                <PrimaryButton text="Save_Ed" onClick={saveListItem} />
             </div>
             {msg && msg.Message &&
                 <MessageBar messageBarType={msg.scope ? msg.scope : MessageBarType.info}>{msg.Message}</MessageBar>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, FC } from 'react';
+import { FC, useRef} from 'react';
 import { TextField } from '@fluentui/react';
 import { Dropdown, IDropdownOption, IDropdownStyles } from '@fluentui/react/lib/Dropdown';
 import { DatePicker, defaultDatePickerStrings } from '@fluentui/react';
@@ -11,6 +11,7 @@ import "@pnp/sp/items";
 import { Guid } from '@microsoft/sp-core-library';
 import { Stack, IStackProps, IStackStyles } from '@fluentui/react/lib/Stack';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
+import { useFormContext } from './FormContext';
 
 export interface IMainFormProps {
     sp: SPFI;
@@ -25,7 +26,7 @@ const stackStyles: Partial<IStackStyles> = { root: { width: 650 } };
 const columnProps: Partial<IStackProps> = {
     tokens: { childrenGap: 15 },
     styles: { root: { width: 300 } },
-}
+};
 
 const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
 
@@ -36,35 +37,37 @@ const dropdownControlledExampleOptions = [
 ];
 
 const MainForm: FC<IMainFormProps> = (props) => {
-    const [title, setTitle] = useState<string>('');
-    const [selectedItem, setSelectedItem] = useState<IDropdownOption>();
-
+    const { title, setTitle,roleTitle, setRoleTitle} = useFormContext();
+    console.log(title, "from MainForm");
+    console.log(roleTitle,"from main")
 
     const onChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
-        setSelectedItem(item);
+        setRoleTitle(item.text);
     };
 
     const _getPeoplePickerItems = (items: any[]) => {
         console.log('Items:', items);
     };
 
+    const containerRef = useRef<HTMLDivElement>(null);
 
     return (
         <React.Fragment>
             <Stack horizontal tokens={stackTokens} styles={stackStyles}>
                 <Stack {...columnProps}>
-                    <div style={{ margin: '10px' }}>
-                        <TextField label="Enter Title:" value={title} onChange={(e, v) => setTitle(v !== undefined ? v : '')} />
+                    <div style={{ marginLeft: '10px', marginRight: '10px' }}>
+                        <TextField label="Enter Title (Single Line Text):" value={title} onChange={(e, v) => setTitle(v !== undefined ? v : '')} />
                         <Dropdown
-                            label="Enter Role Title"
-                            selectedKey={selectedItem ? selectedItem.key : undefined}
+                            label="Enter Role Title (Dropdown)"
+                            selectedKey={roleTitle}
                             onChange={onChange}
                             placeholder="Select an option"
                             options={dropdownControlledExampleOptions}
                             styles={dropdownStyles}
+                            required={true}
                         />
                         <DatePicker
-                            placeholder="Select a date..."
+                            placeholder="Select a date"
                             label='Date of Board Ratification Level'
                             strings={defaultDatePickerStrings}
                         />
@@ -74,7 +77,7 @@ const MainForm: FC<IMainFormProps> = (props) => {
                                 msGraphClientFactory: props.context.msGraphClientFactory,
                                 spHttpClient: props.context.spHttpClient
                             }}
-                            titleText="Incumbent"
+                            titleText="Incumbent (People Picker)"
                             personSelectionLimit={1}
                             groupName=''
                             showtooltip={true}
@@ -82,23 +85,21 @@ const MainForm: FC<IMainFormProps> = (props) => {
                             disabled={false}
                             searchTextLimit={3}
                             onChange={_getPeoplePickerItems}
-                            principalTypes={[PrincipalType.User,PrincipalType.SharePointGroup,PrincipalType.SecurityGroup,PrincipalType.DistributionList]}
+                            principalTypes={[PrincipalType.User, PrincipalType.SharePointGroup, PrincipalType.SecurityGroup, PrincipalType.DistributionList]}
                             resolveDelay={1000}
                             placeholder='Enter a name or email address'
                         />
-                        
                     </div>
-                    
                 </Stack>
                 <Stack {...columnProps}>
-                    <div style={{ margin: '10px' }}>
-                        <TextField 
-                        label="Max Role Term Length" 
+                    <TextField 
+                        label="Max Role Term Length (Number Field)" 
                         value={title}
                         type='number' 
                         placeholder='Enter a value here'
-                        onChange={(e, v) => setTitle(v !== undefined ? v : '')} />
-                    </div>
+                        onChange={(e, v) => setTitle(v !== undefined ? v : '')} 
+                    />
+                    <TextField label="Current Appointments (Multi lines)" multiline autoAdjustHeight scrollContainerRef={containerRef} />
                 </Stack>
             </Stack>
         </React.Fragment>

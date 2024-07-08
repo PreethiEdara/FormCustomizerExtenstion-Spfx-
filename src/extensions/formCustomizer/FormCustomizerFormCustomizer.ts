@@ -5,6 +5,7 @@ import { BaseFormCustomizer } from '@microsoft/sp-listview-extensibility';
 import { SPFI, spfi, SPFx } from "@pnp/sp";
 import FormCustomizer, { IFormCustomizerProps } from './components/FormCustomizer';
 
+
 export interface IFormCustomizerFormCustomizerProperties {
   sampleText?: string;
 }
