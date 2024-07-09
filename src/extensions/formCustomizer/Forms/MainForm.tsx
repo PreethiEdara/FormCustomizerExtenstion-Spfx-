@@ -1,17 +1,12 @@
 import * as React from 'react';
-import { FC, useRef} from 'react';
-import { TextField } from '@fluentui/react';
-import { Dropdown, IDropdownOption, IDropdownStyles } from '@fluentui/react/lib/Dropdown';
-import { DatePicker, defaultDatePickerStrings } from '@fluentui/react';
+import { FC, useEffect, useRef, useState } from 'react';
+import { TextField, Dropdown, IDropdownOption, IDropdownStyles, DatePicker, defaultDatePickerStrings, Stack, IStackProps, IStackStyles } from '@fluentui/react';
 import { PeoplePicker, PrincipalType } from "@pnp/spfx-controls-react/lib/PeoplePicker";
 import { SPFI } from '@pnp/sp';
-import "@pnp/sp/webs";
-import "@pnp/sp/lists";
-import "@pnp/sp/items";
 import { Guid } from '@microsoft/sp-core-library';
-import { Stack, IStackProps, IStackStyles } from '@fluentui/react/lib/Stack';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { useFormContext } from './FormContext';
+import { getChoicesFromSharePointList } from './spHelper';
 
 export interface IMainFormProps {
     sp: SPFI;
@@ -30,24 +25,50 @@ const columnProps: Partial<IStackProps> = {
 
 const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
 
-const dropdownControlledExampleOptions = [
-    { key: 'Business Leader', text: 'Business Leader' },
-    { key: 'Office Leader', text: 'Office Leader' },
-    { key: 'Americas BIM Manager', text: 'Americas BIM Manager' },
-];
+// const dropdownControlledExampleOptions = [
+//     { key: 'Business Leader', text: 'Business Leader' },
+//     { key: 'Office Leader', text: 'Office Leader' },
+//     { key: 'Americas BIM Manager', text: 'Americas BIM Manager' },
+// ];
 
 const MainForm: FC<IMainFormProps> = (props) => {
-    const { title, setTitle,roleTitle, setRoleTitle} = useFormContext();
-    console.log(title, "from MainForm");
-    console.log(roleTitle,"from main")
+    const { title, setTitle, roleTitle, setRoleTitle, dateValue, setDateValue, selectedUsers, setSelectedUsers, maxRole,setMaxRole } = useFormContext();
+    const [dropdownOptions, setDropdownOptions] = useState<IDropdownOption[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const onChange = (event: React.FormEvent<HTMLDivElement>, item: IDropdownOption): void => {
         setRoleTitle(item.text);
     };
 
-    const _getPeoplePickerItems = (items: any[]) => {
-        console.log('Items:', items);
+    const onSelectDate = (date: Date | null | undefined): void => {
+        if (date) {
+            setDateValue(date);
+        }
     };
+
+    const _getPeoplePickerItems = (items: any[]) => {
+        setSelectedUsers(items.length > 0 ? items[0] : null);
+    };
+
+    useEffect(() => {
+        console.log('Selected User:', selectedUsers);
+    }, [selectedUsers]);
+
+    useEffect(() => {
+        const fetchDropdownChoices = async () => {
+            try {
+                console.log(isLoading)
+                const choices = await getChoicesFromSharePointList(props.sp, props.listGuid.toString(), 'RoleTitle');
+                const options = choices.map(choice => ({ key: choice, text: choice }));
+                setDropdownOptions(options);
+                setIsLoading(false);
+            } catch (error) {
+                console.error('Error fetching choices from SharePoint list:', error);
+                setIsLoading(false);
+            }
+        };
+        fetchDropdownChoices();
+    }, [props.sp, props.listGuid]);
 
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -62,7 +83,7 @@ const MainForm: FC<IMainFormProps> = (props) => {
                             selectedKey={roleTitle}
                             onChange={onChange}
                             placeholder="Select an option"
-                            options={dropdownControlledExampleOptions}
+                            options={dropdownOptions}
                             styles={dropdownStyles}
                             required={true}
                         />
@@ -70,6 +91,8 @@ const MainForm: FC<IMainFormProps> = (props) => {
                             placeholder="Select a date"
                             label='Date of Board Ratification Level'
                             strings={defaultDatePickerStrings}
+                            value={dateValue}
+                            onSelectDate={onSelectDate}
                         />
                         <PeoplePicker
                             context={{
@@ -94,10 +117,10 @@ const MainForm: FC<IMainFormProps> = (props) => {
                 <Stack {...columnProps}>
                     <TextField 
                         label="Max Role Term Length (Number Field)" 
-                        value={title}
+                        value={maxRole !== undefined ? maxRole.toString() : ''}
                         type='number' 
                         placeholder='Enter a value here'
-                        onChange={(e, v) => setTitle(v !== undefined ? v : '')} 
+                        onChange={(e, v) => setMaxRole(v !== undefined ? parseInt(v) : undefined)}  
                     />
                     <TextField label="Current Appointments (Multi lines)" multiline autoAdjustHeight scrollContainerRef={containerRef} />
                 </Stack>
