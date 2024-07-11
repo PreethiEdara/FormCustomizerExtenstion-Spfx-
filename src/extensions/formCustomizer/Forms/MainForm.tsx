@@ -32,7 +32,7 @@ const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 300 } };
 // ];
 
 const MainForm: FC<IMainFormProps> = (props) => {
-    const { title, setTitle, roleTitle, setRoleTitle, dateValue, setDateValue, selectedUsers, setSelectedUsers, maxRole,setMaxRole } = useFormContext();
+    const { title, setTitle, roleTitle, setRoleTitle, dateValue, setDateValue, selectedUsers, setSelectedUsers, maxRole,setMaxRole,peoplePickerKey,Appointments, setAppointments } = useFormContext();
     const [dropdownOptions, setDropdownOptions] = useState<IDropdownOption[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -47,7 +47,7 @@ const MainForm: FC<IMainFormProps> = (props) => {
     };
 
     const _getPeoplePickerItems = (items: any[]) => {
-        setSelectedUsers(items.length > 0 ? items[0] : null);
+        setSelectedUsers(items);
     };
 
     useEffect(() => {
@@ -71,7 +71,7 @@ const MainForm: FC<IMainFormProps> = (props) => {
     }, [props.sp, props.listGuid]);
 
     const containerRef = useRef<HTMLDivElement>(null);
-
+    
     return (
         <React.Fragment>
             <Stack horizontal tokens={stackTokens} styles={stackStyles}>
@@ -95,6 +95,7 @@ const MainForm: FC<IMainFormProps> = (props) => {
                             onSelectDate={onSelectDate}
                         />
                         <PeoplePicker
+                            key={peoplePickerKey}
                             context={{
                                 absoluteUrl: props.context.pageContext.web.absoluteUrl,
                                 msGraphClientFactory: props.context.msGraphClientFactory,
@@ -111,6 +112,7 @@ const MainForm: FC<IMainFormProps> = (props) => {
                             principalTypes={[PrincipalType.User, PrincipalType.SharePointGroup, PrincipalType.SecurityGroup, PrincipalType.DistributionList]}
                             resolveDelay={1000}
                             placeholder='Enter a name or email address'
+                            
                         />
                     </div>
                 </Stack>
@@ -122,7 +124,14 @@ const MainForm: FC<IMainFormProps> = (props) => {
                         placeholder='Enter a value here'
                         onChange={(e, v) => setMaxRole(v !== undefined ? parseInt(v) : undefined)}  
                     />
-                    <TextField label="Current Appointments (Multi lines)" multiline autoAdjustHeight scrollContainerRef={containerRef} />
+                    <TextField 
+                        label="Current Appointments (Multi lines)" 
+                        multiline 
+                        autoAdjustHeight 
+                        scrollContainerRef={containerRef} 
+                        value={Appointments} 
+                        onChange={(e, v) => setAppointments(v !== undefined ? v : '')} 
+                        />
                 </Stack>
             </Stack>
         </React.Fragment>

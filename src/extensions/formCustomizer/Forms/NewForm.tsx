@@ -11,6 +11,7 @@ import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import "@pnp/sp/site-users/web";
+// import styles from './FormCustomizer.module.scss';
 
 
 export interface INewFormProps {
@@ -22,15 +23,17 @@ export interface INewFormProps {
 }
 
 const NewForm: FC<INewFormProps> = (props) => {
-    const { title, setTitle, roleTitle, setRoleTitle, dateValue, setDateValue, selectedUsers, setSelectedUsers, maxRole, setMaxRole } = useFormContext();
+    const { title, setTitle, roleTitle, setRoleTitle, dateValue, setDateValue, selectedUsers,setSelectedUsers, setPeoplePickerKey, maxRole, setMaxRole,Appointments, setAppointments } = useFormContext();
     const [msg, setMsg] = useState<any>(undefined);
 
     const clearControls = () => {
         setTitle('');
         setRoleTitle('');
         setDateValue(undefined);
-        setSelectedUsers(null);
-        setMaxRole(undefined)
+        setSelectedUsers([])
+        setPeoplePickerKey(Math.random().toString());
+        setMaxRole(undefined);
+        setAppointments('')
     };
 
     const getUserId = async (loginName: string) => {
@@ -51,7 +54,7 @@ const NewForm: FC<INewFormProps> = (props) => {
 
         let incumbentField = {};
         if (selectedUsers) {
-            const userId = await getUserId(selectedUsers.loginName);
+            const userId = await getUserId(selectedUsers[0].loginName);
             if (userId) {
                 incumbentField = { IncumbentId: userId };
             } else {
@@ -66,7 +69,8 @@ const NewForm: FC<INewFormProps> = (props) => {
                 RoleTitle: roleTitle,
                 DateofBoardRatificationLevel: formattedDate,
                 ...incumbentField,
-                MaxRoleTermLength: maxRole
+                MaxRoleTermLength: maxRole,
+                CurrentAppointments: Appointments
             });
             setMsg({ scope: MessageBarType.success, Message: 'New item created successfully!' });
             clearControls();
@@ -79,6 +83,7 @@ const NewForm: FC<INewFormProps> = (props) => {
     return (
         <React.Fragment>
             <div>New Form</div>
+            <div style={{margin:'1%'}}>
             <MainForm 
                 sp={props.sp} 
                 context={props.context} 
@@ -91,8 +96,9 @@ const NewForm: FC<INewFormProps> = (props) => {
                     {msg.Message}
                 </MessageBar>
             )}
-            <PrimaryButton text="Save" onClick={saveListItem} />
-            <DefaultButton text="Close" onClick={props.onClose} />
+            </div>
+            <PrimaryButton style={{margin:'0.5% 2%'}} text="Save" onClick={saveListItem} />
+            <DefaultButton text="Cancell" onClick={props.onClose} />
         </React.Fragment>
     );
 };
