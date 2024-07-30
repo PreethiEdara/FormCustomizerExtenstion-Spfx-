@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, FC } from 'react';
-import { PrimaryButton, DefaultButton } from '@fluentui/react';
+import { PrimaryButton, DefaultButton, Panel, PanelType } from '@fluentui/react';
 import { MessageBar, MessageBarType } from '@fluentui/react';
 import { SPFI } from '@pnp/sp';
 import { Guid } from '@microsoft/sp-core-library';
@@ -11,7 +11,7 @@ import "@pnp/sp/webs";
 import "@pnp/sp/lists";
 import "@pnp/sp/items";
 import "@pnp/sp/site-users/web";
-// import styles from './FormCustomizer.module.scss';
+import styles from '../components/FormCustomizer.module.scss';
 
 
 export interface INewFormProps {
@@ -23,8 +23,9 @@ export interface INewFormProps {
 }
 
 const NewForm: FC<INewFormProps> = (props) => {
-    const { title, setTitle, roleTitle, setRoleTitle, dateValue, setDateValue, selectedUsers,setSelectedUsers, setPeoplePickerKey, maxRole, setMaxRole,Appointments, setAppointments } = useFormContext();
+    const { title, setTitle, roleTitle, setRoleTitle, dateValue, setDateValue, selectedUsers,setSelectedUsers, setPeoplePickerKey, maxRole, setMaxRole,Appointments, setAppointments, setErrMsg,isPanelOpen, setIsPanelOpen} = useFormContext();
     const [msg, setMsg] = useState<any>(undefined);
+    
 
     const clearControls = () => {
         setTitle('');
@@ -33,7 +34,10 @@ const NewForm: FC<INewFormProps> = (props) => {
         setSelectedUsers([])
         setPeoplePickerKey(Math.random().toString());
         setMaxRole(undefined);
-        setAppointments('')
+        setAppointments('');
+        setErrMsg(false);
+        setIsPanelOpen(false);
+        props.onClose();
     };
 
     const getUserId = async (loginName: string) => {
@@ -48,12 +52,17 @@ const NewForm: FC<INewFormProps> = (props) => {
 
     const saveListItem = async () => {
         setMsg(undefined);
+
+        if (!roleTitle) {
+            setErrMsg(true);
+            return;
+        }
         
-        // Ensure dateValue is a valid Date object
+        
         const formattedDate = dateValue ? dateValue : undefined;
 
         let incumbentField = {};
-        if (selectedUsers) {
+        if (selectedUsers && selectedUsers.length > 0) {
             const userId = await getUserId(selectedUsers[0].loginName);
             if (userId) {
                 incumbentField = { IncumbentId: userId };
@@ -67,9 +76,9 @@ const NewForm: FC<INewFormProps> = (props) => {
             await props.sp.web.lists.getById(props.listGuid.toString()).items.add({
                 Title: title,
                 RoleTitle: roleTitle,
-                DateofBoardRatificationLevel: formattedDate,
+                DateOfBoardRatificationLevel: formattedDate,
                 ...incumbentField,
-                MaxRoleTermLength: maxRole,
+                MaxRole: maxRole,
                 CurrentAppointments: Appointments
             });
             setMsg({ scope: MessageBarType.success, Message: 'New item created successfully!' });
@@ -80,10 +89,20 @@ const NewForm: FC<INewFormProps> = (props) => {
         }
     };
 
+    const onClosePanel = () => {
+        setIsPanelOpen(false);
+        props.onClose();
+    };
+
     return (
         <React.Fragment>
-            <div>New Form</div>
-            <div style={{margin:'1%'}}>
+            <Panel
+                isOpen={isPanelOpen}
+                type={PanelType.custom}
+                customWidth="700px"
+                onDismiss={onClosePanel}>
+            <div className={styles.mainForm}>
+            <h2>New Item</h2>
             <MainForm 
                 sp={props.sp} 
                 context={props.context} 
@@ -92,13 +111,15 @@ const NewForm: FC<INewFormProps> = (props) => {
                 onSave={saveListItem} 
             />
             {msg && (
-                <MessageBar messageBarType={msg.scope}>
+                <MessageBar className={styles.msgBar}
+                    messageBarType={msg.scope}>
                     {msg.Message}
                 </MessageBar>
             )}
             </div>
-            <PrimaryButton style={{margin:'0.5% 2%'}} text="Save" onClick={saveListItem} />
-            <DefaultButton text="Cancell" onClick={props.onClose} />
+            <PrimaryButton className={styles.btn} text="Save" onClick={saveListItem} />
+            <DefaultButton text="Cancel" onClick={props.onClose} />
+            </Panel>
         </React.Fragment>
     );
 };

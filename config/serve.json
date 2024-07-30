@@ -8,7 +8,7 @@
       "formCustomizer": {
         "componentId": "51010ce2-4380-4ba8-8771-4bccaae42a8c",
         "PageType": 8,
-        "RootFolder": "/sites/preethi-test/Lists/FormCustomizer",
+        "RootFolder": "/sites/preethi-test/Lists/FC_ContentTypes",
         "properties": {
           "sampleText": "Value"
         }
@@ -19,7 +19,7 @@
       "formCustomizer": {
         "componentId": "51010ce2-4380-4ba8-8771-4bccaae42a8c",
         "PageType": 8,
-        "RootFolder": "/sites/preethi-test/Lists/FormCustomizer",
+        "RootFolder": "/sites/preethi-test/Lists/FC_ContentTypes",
         "properties": {
           "sampleText": "Value"
         }
@@ -30,8 +30,8 @@
       "formCustomizer": {
         "componentId": "51010ce2-4380-4ba8-8771-4bccaae42a8c",
         "PageType": 6,
-        "RootFolder": "/sites/preethi-test/Lists/FormCustomizer",
-        "ID": 2,
+        "RootFolder": "/sites/preethi-test/Lists/FC_ContentTypes",
+        "ID": 16,
         "properties": {
           "sampleText": "Value"
         }
@@ -42,8 +42,8 @@
       "formCustomizer": {
         "componentId": "51010ce2-4380-4ba8-8771-4bccaae42a8c",
         "PageType": 4,
-        "RootFolder": "/sites/preethi-test/Lists/FormCustomizer",
-        "ID": 1,
+        "RootFolder": "/sites/preethi-test/Lists/FC_ContentTypes",
+        "ID": 16,
         "properties": {
           "sampleText": "Value"
         }

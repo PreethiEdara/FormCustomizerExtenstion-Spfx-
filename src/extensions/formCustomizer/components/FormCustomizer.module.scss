@@ -1,9 +1,38 @@
 .formCustomizer {
   background-color: "[theme:white, default:#ffffff]";
   color: "[theme:themePrimary, default:#0078d4]";
-  padding: 0.5rem;
+  padding: 2rem;
 }
 
 .mainForm{
-  margin: 10%;
+  margin: 1%;
 }
+
+.msgBar{
+  margin-top: 2%;
+  margin-left: 0.9%;
+  max-width: fit-content;
+}
+
+.title{
+  margin : 1.5rem 1.8rem;
+  max-width: fit-content;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: larger;
+}
+
+.btn{
+  margin: 1.4%
+}
+
+.displayBtn{
+  margin: 6px;
+  margin-top: 25px;
+}
+
+.displayTitle{
+  margin: 60px
+}
+
+

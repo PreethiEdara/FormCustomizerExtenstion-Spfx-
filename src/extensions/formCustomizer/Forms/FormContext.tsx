@@ -16,6 +16,12 @@ interface IFormContext {
     setPeoplePickerKey: React.Dispatch<React.SetStateAction<string>>;
     Appointments: string;
     setAppointments: React.Dispatch<React.SetStateAction<string>>;
+    errmsg: boolean;
+    setErrMsg: React.Dispatch<React.SetStateAction<boolean>>;
+    isPanelOpen : boolean;
+    setIsPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    showEditPanel: boolean;
+    setShowEditPanel: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FormContext = React.createContext<IFormContext | undefined>(undefined);
@@ -28,9 +34,12 @@ const FormProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     const [selectedUsers, setSelectedUsers] = React.useState<any[]>([]);
     const [peoplePickerKey, setPeoplePickerKey] = React.useState<string>(Math.random().toString());
     const [Appointments, setAppointments] = React.useState<string>('');
+    const[errmsg, setErrMsg] = React.useState<boolean>(false);
+    const [isPanelOpen, setIsPanelOpen] = React.useState<boolean>(true);
+    const [showEditPanel, setShowEditPanel] = React.useState<boolean>(false);
 
     return (
-        <FormContext.Provider value={{ title, setTitle, roleTitle, setRoleTitle, dateValue, setDateValue,selectedUsers, setSelectedUsers, maxRole, setMaxRole,peoplePickerKey, setPeoplePickerKey,Appointments,setAppointments}}>
+        <FormContext.Provider value={{ title, setTitle, roleTitle, setRoleTitle, dateValue, setDateValue,selectedUsers, setSelectedUsers, maxRole, setMaxRole,peoplePickerKey, setPeoplePickerKey,Appointments,setAppointments,errmsg,setErrMsg,isPanelOpen,setIsPanelOpen, showEditPanel, setShowEditPanel}}>
             {children}
         </FormContext.Provider>
     );

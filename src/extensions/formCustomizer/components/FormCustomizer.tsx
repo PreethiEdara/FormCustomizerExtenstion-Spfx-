@@ -23,11 +23,10 @@ export interface IFormCustomizerProps {
 const FormCustomizer: React.FC<IFormCustomizerProps> = (props) => {
   return (
     <div className={styles.formCustomizer}>
-      {props.displayMode === FormDisplayMode.New &&   
       <FormProvider>
-        <NewForm sp={props.sp} context={props.context} listGuid={props.listGuid} onSave={props.onSave} onClose={props.onClose} />
-      </FormProvider>
-        
+
+      {props.displayMode === FormDisplayMode.New &&   
+        <NewForm sp={props.sp} context={props.context} listGuid={props.listGuid} onSave={props.onSave} onClose={props.onClose} />  
       }
       {props.displayMode === FormDisplayMode.Edit &&
         <EditForm sp={props.sp} context={props.context} listGuid={props.listGuid} itemId={props.itemID} onSave={props.onSave} onClose={props.onClose} />
@@ -35,6 +34,8 @@ const FormCustomizer: React.FC<IFormCustomizerProps> = (props) => {
       {props.displayMode === FormDisplayMode.Display &&
         <DisplayForm sp={props.sp} context={props.context} listGuid={props.listGuid} itemId={props.itemID} onClose={props.onClose} />
       }
+      
+      </FormProvider>
     </div>
   );
 };

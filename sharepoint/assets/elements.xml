@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction
+    Title="FormCustomizer"
+    Location="ClientSideExtension.ListViewCommandSet.CommandBar"
+    ClientSideComponentId="51010ce2-4380-4ba8-8771-4bccaae42a8c"
+    ClientSideComponentProperties="{&quot;exampleProperty&quot;:&quot;value&quot;}">
+  </CustomAction>
+</Elements>
