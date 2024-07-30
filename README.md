@@ -2,7 +2,7 @@
 
 ## Summary
 
-This is a Form Customizer Extension in Sharepoint Extensions which is used to improve the form experiences in list/libraries in sharepoint.
+This is a Form Customizer Extension in which is used to improve the form experiences in list/libraries in sharepoint.
 It helps in overriding the forms in lists by including contentTypes to the component.
 
 Here are a few snippets of the final output:
